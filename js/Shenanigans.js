@@ -16,7 +16,21 @@
 			SteamRemoteClient.Keyboard.Key( key );
 		}
 	} );
+	
+	$( document ).on( 'mousewheel', function( e )
+	{
+		if( trapArea.is( ':hover' ) )
+		{
+			e.preventDefault();
 
+			if(e.originalEvent.wheelDelta > 0){
+				SteamRemoteClient.Keyboard.Key( 'key_left' );
+			}else{
+				SteamRemoteClient.Keyboard.Key( 'key_right' );
+			}
+		}
+	});
+		
 	$( document ).on( 'mousemove', function( e )
 	{
 		if( trapArea.is( ':hover' ) )
