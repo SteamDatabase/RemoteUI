@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Remote Control</title>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/shenanigans.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="alert fade">
+					<h4 class="title">Error</h4>
+					<p class="data">Something</p>
+				</div>
+				
+				<div class="page-header">
+					<h1>Steam Remote Control</h1>
+				</div>
+				
+				<div class="input-group">
+					<input class="form-control input-lg js-steam-input" type="text">
+					
+					<div class="input-group-btn">
+						<button class="btn btn-default btn-lg js-steam-sequence">Sequence</button>
+						<button class="btn btn-default btn-lg js-steam-key">Key</button>
+						<button class="btn btn-default btn-lg js-steam-button">Button</button>
+						<button class="btn btn-default btn-lg js-steam-games">Run Game</button>
+						<button class="btn btn-default btn-lg js-steam-space">Set Space</button>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="btn-group btn-group-justified">
+					<a class="btn btn-lg btn-info js-steam-button" data-button="left"><span class="glyphicon glyphicon-arrow-left"></span></a>
+					<a class="btn btn-lg btn-info js-steam-button" data-button="right"><span class="glyphicon glyphicon-arrow-right"></span></a>
+					<a class="btn btn-lg btn-info js-steam-button" data-button="up"><span class="glyphicon glyphicon-arrow-up"></span></a>
+					<a class="btn btn-lg btn-info js-steam-button" data-button="down"><span class="glyphicon glyphicon-arrow-down"></span></a>
+					<a class="btn btn-lg btn-success js-steam-button" data-button="a">A</a>
+					<a class="btn btn-lg btn-danger js-steam-button" data-button="b">B</a>
+					<a class="btn btn-lg btn-primary js-steam-button" data-button="x">X</a>
+					<a class="btn btn-lg btn-warning js-steam-button" data-button="y">Y</a>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="well mousetrap">
+					<h3>It's a trap</h3>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="btn-group btn-group-justified">
+					<a class="btn btn-lg btn-default btn-block js-steam-get-games"><span class="glyphicon glyphicon-list"></span> Get games</a>
+					<a class="btn btn-lg btn-default btn-block js-steam-get-space"><span class="glyphicon glyphicon glyphicon-th-large"></span> Get space</a>
+				</div>
+				
+				<div class="list-group js-steam-games-list"></div>
+			</div>
+		</div>
+		
+		<script src="libs/jquery-2.0.3.min.js"></script>
+		<script src="js/Keymap.js"></script>
+		<script src="js/RemoteClient.js"></script>
+		<script src="js/Shenanigans.js"></script>
+	</body>
+</html>

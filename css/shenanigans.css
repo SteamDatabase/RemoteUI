@@ -1,0 +1,27 @@
+.alert {
+	margin-top: 20px;
+}
+
+.page-header {
+	margin-top: 0;
+}
+
+.row {
+	margin-bottom: 15px;
+}
+
+.mousetrap {
+	margin-bottom: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.mousetrap h3 {
+	text-align: center;
+	color: #CCC;
+}
+
+.list-group {
+	margin-top: 15px;
+}
