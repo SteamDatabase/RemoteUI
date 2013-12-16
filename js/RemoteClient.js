@@ -12,8 +12,8 @@
 var SteamRemoteClient =
 {
 	Address: location.protocol + '//' + location.host + '/steam/',
-	DeviceName: 'SteamDB Hacks',
-	DeviceToken: 'AmazingSteamDB',
+	DeviceName: 'SteamDB Remote Control',
+	DeviceToken: 'PraiseLordGaben',
 	AlertTimeout: 0,
 	
 	Keyboard:
