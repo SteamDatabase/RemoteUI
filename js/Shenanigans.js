@@ -3,56 +3,52 @@
 	var trapArea = $( '.mousetrap' ), input = $( '.js-steam-input' ), lastPosition = { x: 0.0, y: 0.0 };
 
 	// Key trap
-	$( document ).on( 'keydown', function( e )
-	{
-		if( trapArea.is( ':hover' ) )
+	$( document ).on( {
+		keydown: function( e )
 		{
-			e.preventDefault();
-			
-			var key = 'key_' + Keycode.GetValueByEvent( e );
-			
-			trapArea.find( 'h3' ).text( key );
-			
-			SteamRemoteClient.Keyboard.Key( key );
+			if( trapArea.is( ':hover' ) )
+			{
+				e.preventDefault();
+				
+				var key = 'key_' + Keycode.GetValueByEvent( e );
+				
+				trapArea.find( 'h3' ).text( key );
+				
+				SteamRemoteClient.Keyboard.Key( key );
+			}
+		},
+		mousewheel: function( e )
+		{
+			if( trapArea.is( ':hover' ) )
+			{
+				e.preventDefault();
+				
+				SteamRemoteClient.Keyboard.Key( e.originalEvent.wheelDelta > 0 ? 'key_left' : 'key_right' ); // Ideally it should be up/down for dropdowns
+			}
+		},
+		mousemove: function( e )
+		{
+			if( trapArea.is( ':hover' ) )
+			{
+				var deltaX = lastPosition.x - event.clientX,
+					deltaY = lastPosition.y - event.clientY;
+				
+				lastPosition =
+				{
+					x: event.clientX,
+					y: event.clientY
+				};
+				
+				SteamRemoteClient.DoPOST( 'mouse/move',
+					{
+						delta_x: -deltaX,
+						delta_y: -deltaY
+					}
+				);
+			}
 		}
 	} );
 	
-	$( document ).on( 'mousewheel', function( e )
-	{
-		if( trapArea.is( ':hover' ) )
-		{
-			e.preventDefault();
-
-			if(e.originalEvent.wheelDelta > 0){
-				SteamRemoteClient.Keyboard.Key( 'key_left' );
-			}else{
-				SteamRemoteClient.Keyboard.Key( 'key_right' );
-			}
-		}
-	});
-		
-	$( document ).on( 'mousemove', function( e )
-	{
-		if( trapArea.is( ':hover' ) )
-		{
-			var deltaX = lastPosition.x - event.clientX,
-			    deltaY = lastPosition.y - event.clientY;
-			
-			lastPosition =
-			{
-				x: event.clientX,
-				y: event.clientY
-			};
-			
-			SteamRemoteClient.DoPOST( 'mouse/move',
-				{
-					delta_x: -deltaX,
-					delta_y: -deltaY
-				}
-			);
-		}
-	} );
-
 	$( trapArea ).on( 'click', function( e )
 	{
 		SteamRemoteClient.DoPOST( 'mouse/click', { button: 'mouse_left' } );
