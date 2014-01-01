@@ -38,3 +38,12 @@
 	color: #7c7c7c;
 	border-color: #ccc;
 }
+
+.btn-dull:hover,
+.btn-dull:focus,
+.btn-dull:active,
+.btn-dull.active {
+	color: #7c7c7c;
+	background-color: #e8e8e8;
+	border-color: #c6c6c6;
+}
