@@ -32,3 +32,9 @@
 	right: 0;
 	border: 0;
 }
+
+.btn-dull {
+	background-color: #eeeeee;
+	color: #7c7c7c;
+	border-color: #ccc;
+}
