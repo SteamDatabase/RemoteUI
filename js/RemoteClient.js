@@ -14,6 +14,7 @@ var SteamRemoteClient =
 	Address: location.protocol + '//' + location.host + '/steam/',
 	DeviceName: 'SteamDB Remote Control',
 	DeviceToken: 'PraiseLordGaben',
+	RequestDelay: 2000, // Set this to 2000 to delay all requests for 2 seconds
 	AlertTimeout: 0,
 	
 	Keyboard:
@@ -65,6 +66,30 @@ var SteamRemoteClient =
 	
 	DoGET: function( url, additionalParameters, callback )
 	{
+		if( SteamRemoteClient.RequestDelay > 0 )
+		{
+			setTimeout( SteamRemoteClient._DoGET, SteamRemoteClient.RequestDelay, url, additionalParameters, callback );
+		}
+		else
+		{
+			SteamRemoteClient._DoGET( url, additionalParameters, callback );
+		}
+	},
+	
+	DoPOST: function( url, additionalParameters )
+	{
+		if( SteamRemoteClient.RequestDelay > 0 )
+		{
+			setTimeout( SteamRemoteClient._DoPOST, SteamRemoteClient.RequestDelay, url, additionalParameters );
+		}
+		else
+		{
+			SteamRemoteClient._DoPOST( url, additionalParameters );
+		}
+	},
+	
+	_DoGET: function( url, additionalParameters, callback )
+	{
 		var data = jQuery.extend(
 		{
 			device_name: SteamRemoteClient.DeviceName,
@@ -93,7 +118,7 @@ var SteamRemoteClient =
 		} );
 	},
 	
-	DoPOST: function( url, additionalParameters )
+	_DoPOST: function( url, additionalParameters )
 	{
 		var data = jQuery.extend(
 		{
