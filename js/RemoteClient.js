@@ -14,7 +14,7 @@ var SteamRemoteClient =
 	Address: location.protocol + '//' + location.host + '/steam/',
 	DeviceName: 'SteamDB Remote Control',
 	DeviceToken: 'PraiseLordGaben',
-	RequestDelay: 2000, // Set this to 2000 to delay all requests for 2 seconds
+	RequestDelay: 0, // Set this to 2000 to delay all requests for 2 seconds
 	AlertTimeout: 0,
 	
 	Keyboard:

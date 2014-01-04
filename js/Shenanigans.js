@@ -1,57 +1,66 @@
 (function()
 {
-	var trapArea = $( '.mousetrap' ), input = $( '.js-steam-input' ), lastPosition = { x: 0.0, y: 0.0 };
+	var trapArea = $( '.mousetrap' ),
+	    input = $( '.js-steam-input' ),
+	    lastPosition = { x: 0.0, y: 0.0 },
+	    isMouseInTrapArea = false;
 
-	// Key trap
-	$( document ).on( {
-		keydown: function( e )
+	// We have to use keydown event on document because trapArea can't really be in focus when pressing keys
+	$( document ).on( 'keydown', function( e )
+	{
+		if( isMouseInTrapArea )
 		{
-			if( trapArea.is( ':hover' ) )
-			{
-				e.preventDefault();
-				
-				var key = 'key_' + Keycode.GetValueByEvent( e );
-				
-				trapArea.find( 'h3' ).text( key );
-				
-				SteamRemoteClient.Keyboard.Key( key );
-			}
-		},
-		mousewheel: function( e )
-		{
-			if( trapArea.is( ':hover' ) )
-			{
-				e.preventDefault();
-				
-				SteamRemoteClient.Keyboard.Key( e.originalEvent.wheelDelta > 0 ? 'key_left' : 'key_right' ); // Ideally it should be up/down for dropdowns
-			}
-		},
-		mousemove: function( e )
-		{
-			if( trapArea.is( ':hover' ) )
-			{
-				var deltaX = lastPosition.x - event.clientX,
-					deltaY = lastPosition.y - event.clientY;
-				
-				lastPosition =
-				{
-					x: event.clientX,
-					y: event.clientY
-				};
-				
-				SteamRemoteClient.DoPOST( 'mouse/move',
-					{
-						delta_x: -deltaX,
-						delta_y: -deltaY
-					}
-				);
-			}
+			var key = 'key_' + Keycode.GetValueByEvent( e );
+			
+			trapArea.find( 'h3' ).text( key );
+			
+			SteamRemoteClient.Keyboard.Key( key );
+			
+			return false;
 		}
 	} );
 	
-	$( trapArea ).on( 'click', function( e )
-	{
-		SteamRemoteClient.DoPOST( 'mouse/click', { button: 'mouse_left' } );
+	$( trapArea ).on( {
+		click: function( )
+		{
+			SteamRemoteClient.DoPOST( 'mouse/click', { button: 'mouse_left' } );
+		},
+		
+		mouseenter: function( )
+		{
+			isMouseInTrapArea = true;
+		},
+		
+		mouseleave: function( )
+		{
+			isMouseInTrapArea = false;
+		},
+		
+		mousewheel: function( e )
+		{
+			SteamRemoteClient.Keyboard.Key( e.originalEvent.wheelDelta > 0 ? 'key_left' : 'key_right' ); // Ideally it should be up/down for dropdowns
+			
+			return false;
+		},
+		
+		mousemove: function( e )
+		{
+			var deltaX = lastPosition.x - e.clientX,
+				deltaY = lastPosition.y - e.clientY;
+			
+			lastPosition =
+			{
+				x: e.clientX,
+				y: e.clientY
+			};
+			
+			SteamRemoteClient.DoPOST( 'mouse/move',
+				{
+					delta_x: -deltaX,
+					delta_y: -deltaY
+				}
+			);
+		}
 	} );
 
 	// Get space
