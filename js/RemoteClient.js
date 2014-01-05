@@ -15,26 +15,27 @@ var SteamRemoteClient =
 	DeviceName: 'SteamDB Remote Control',
 	DeviceToken: 'PraiseLordGaben',
 	RequestDelay: 0, // Set this to 2000 to delay all requests for 2 seconds
+	ShowAlerts: false, // Used by RemoteUI.html
 	AlertTimeout: 0,
 	
 	Keyboard:
 	{
-		Sequence: function( sequence )
+		Sequence: function( sequence, callback )
 		{
-			SteamRemoteClient.DoPOST( 'keyboard/sequence/', { sequence: sequence } );
+			SteamRemoteClient.DoPOST( 'keyboard/sequence/', { sequence: sequence }, callback );
 		},
 		
-		Key: function( name )
+		Key: function( name, callback )
 		{
-			SteamRemoteClient.DoPOST( 'keyboard/key/', { name: name } );
+			SteamRemoteClient.DoPOST( 'keyboard/key/', { name: name }, callback );
 		}
 	},
 	
 	Button:
 	{
-		Press: function( button )
+		Press: function( button, callback )
 		{
-			SteamRemoteClient.DoPOST( 'button/' + button + '/' );
+			SteamRemoteClient.DoPOST( 'button/' + button + '/', {}, callback );
 		}
 	},
 	
@@ -45,9 +46,9 @@ var SteamRemoteClient =
 			SteamRemoteClient.DoGET( 'games/', {}, callback );
 		},
 		
-		Action: function( appid, action )
+		Action: function( appid, action, callback )
 		{
-			SteamRemoteClient.DoPOST( 'games/' + appid + '/' + action );
+			SteamRemoteClient.DoPOST( 'games/' + appid + '/' + action, {}, callback );
 		}
 	},
 	
@@ -58,9 +59,9 @@ var SteamRemoteClient =
 			SteamRemoteClient.DoGET( 'space/', {}, callback );
 		},
 		
-		Set: function( space )
+		Set: function( space, callback )
 		{
-			SteamRemoteClient.DoPOST( 'space/', { name: space } ); // Known spaces: webbrowser, library, friends
+			SteamRemoteClient.DoPOST( 'space/', { name: space }, callback ); // Known spaces: webbrowser, library, friends
 		}
 	},
 	
@@ -76,15 +77,15 @@ var SteamRemoteClient =
 		}
 	},
 	
-	DoPOST: function( url, additionalParameters )
+	DoPOST: function( url, additionalParameters, callback )
 	{
 		if( SteamRemoteClient.RequestDelay > 0 )
 		{
-			setTimeout( SteamRemoteClient._DoPOST, SteamRemoteClient.RequestDelay, url, additionalParameters );
+			setTimeout( SteamRemoteClient._DoPOST, SteamRemoteClient.RequestDelay, url, additionalParameters, callback );
 		}
 		else
 		{
-			SteamRemoteClient._DoPOST( url, additionalParameters );
+			SteamRemoteClient._DoPOST( url, additionalParameters, callback );
 		}
 	},
 	
@@ -118,7 +119,7 @@ var SteamRemoteClient =
 		} );
 	},
 	
-	_DoPOST: function( url, additionalParameters )
+	_DoPOST: function( url, additionalParameters, callback )
 	{
 		var data = jQuery.extend(
 		{
@@ -132,9 +133,14 @@ var SteamRemoteClient =
 			method: 'POST',
 			dataType: 'json',
 			timeout: 5000,
-			success: function( )
+			success: function( response )
 			{
 				SteamRemoteClient.ShowAlert( 'success', '<b>Request Executed:</b> /steam/' + url, data );
+				
+				if( typeof callback === 'function' )
+				{
+					callback( response );
+				}
 			},
 			error: function( )
 			{
@@ -145,6 +151,11 @@ var SteamRemoteClient =
 	
 	ShowAlert: function( cssClass, text, data )
 	{
+		if( !SteamRemoteClient.ShowAlerts )
+		{
+			return;
+		}
+		
 		$( '.alert' )
 			.removeClass( 'alert-' + ( cssClass === 'success' ? 'danger' : 'success' ) )
 			.addClass( 'alert-' + cssClass + ' in' )

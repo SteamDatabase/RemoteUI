@@ -1,5 +1,7 @@
 (function()
 {
+	SteamRemoteClient.ShowAlerts = true;
+	
 	var trapArea = $( '.mousetrap' ),
 	    input = $( '.js-steam-input' ),
 	    lastPosition = { x: 0.0, y: 0.0 },
@@ -45,8 +47,8 @@
 		
 		mousemove: function( e )
 		{
-			var deltaX = lastPosition.x - e.clientX,
-				deltaY = lastPosition.y - e.clientY;
+			var deltaX = e.clientX - lastPosition.x,
+			    deltaY = e.clientY - lastPosition.y;
 			
 			lastPosition =
 			{
@@ -56,8 +58,8 @@
 			
 			SteamRemoteClient.DoPOST( 'mouse/move',
 				{
-					delta_x: -deltaX,
-					delta_y: -deltaY
+					delta_x: deltaX,
+					delta_y: deltaY
 				}
 			);
 		}
