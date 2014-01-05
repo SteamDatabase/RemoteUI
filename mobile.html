@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Steam Remote Mobile Client</title>
+	<style>
+		html, body {
+			width: 100%;
+			height: 100%;
+		}
+		
+		body {
+			margin: 0;
+			background-color: #2c3e50;
+			color: #ecf0f1;
+			font-size: 32px;
+			font-family: Helvetica, Arial, sans-serif;
+			
+			display: -webkit-box;
+			display: -webkit-flex;
+			display: -moz-box;
+			display: flex;
+			-webkit-box-align: center;
+			-webkit-align-items: center;
+			-moz-box-align: center;
+			align-items: center;
+			-webkit-box-pack: center;
+			-webkit-justify-content: center;
+			-moz-box-pack: center;
+			justify-content: center;
+		}
+		
+		img {
+			border: 0;
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<img id="tap" src="icons/Single_Tap.png">
+		<img id="swipeleft" src="icons/Swipe_Left.png">
+		<img id="swiperight" src="icons/Swipe_Right.png">
+		<img id="swipeup" src="icons/Swipe_Up.png">
+		<img id="swipedown" src="icons/Swipe_Down.png">
+		<img id="drag" src="icons/Hold_Timer.png">
+	</div>
+	
+	<script src="libs/jquery-1.9.1.min.js"></script>
+	<script src="js/hammer.js"></script>
+	<script src="js/hammer_fakemultitouch.js"></script>
+	<script src="js/RemoteClient.js"></script>
+	<script>
+		(function()
+		{
+			// Send a request straight away so it asks for permission if needed
+			SteamRemoteClient.DoGET( 'authorized/' );
+			
+			Hammer.plugins.fakeMultitouch();
+			
+			var hammer = Hammer( document.body,
+			                     {
+			                        drag_block_horizontal: true,
+			                        drag_block_vertical: true,
+			                        drag_min_distance: 0,
+			                        hold: false,
+			                        transform: false,
+			                        release: false
+			                     }),
+			    container = document.getElementById( 'container' ),
+			    iconTimeout = 0,
+			    previousIcon = false;
+			
+			hammer.on( 'tap', function( e )
+			{
+				ShowIcon( 'tap' );
+				
+				SteamRemoteClient.DoPOST( 'mouse/click', { button: 'mouse_left' } );
+			} );
+			
+			hammer.on( 'swipeleft', function( e )
+			{
+				ShowIcon( 'swipeleft' );
+				
+				SteamRemoteClient.Button.Press( 'left' );
+			} );
+			
+			hammer.on( 'swipeup', function( e )
+			{
+				ShowIcon( 'swipeup' );
+				
+				SteamRemoteClient.Button.Press( 'up' );
+			} );
+			
+			hammer.on( 'swipedown', function( e )
+			{
+				ShowIcon( 'swipedown' );
+				
+				SteamRemoteClient.Button.Press( 'down' );
+			} );
+			
+			hammer.on( 'swiperight', function( e )
+			{
+				ShowIcon( 'swiperight' );
+				
+				SteamRemoteClient.Button.Press( 'right' );
+			} );
+			
+			hammer.on( 'drag', function( e )
+			{
+				ShowIcon( 'drag' );
+				
+				SteamRemoteClient.DoPOST( 'mouse/move',
+					{
+						delta_x: e.gesture.deltaX,
+						delta_y: e.gesture.deltaY
+					}
+				);
+			} );
+			
+			function ShowIcon( elementName )
+			{
+				document.getElementById( elementName ).style.display = 'block';
+				
+				clearTimeout( iconTimeout );
+				
+				if( previousIcon !== false && previousIcon !== elementName )
+				{
+					document.getElementById( previousIcon ).style.display = 'none';
+				}
+				
+				previousIcon = elementName;
+				
+				iconTimeout = setTimeout( function( )
+				{
+					document.getElementById( elementName ).style.display = 'none';
+					
+					iconTimeout = 0;
+				}, 2500 );
+			}
+		}());
+	</script>
+</body>
+</html>
