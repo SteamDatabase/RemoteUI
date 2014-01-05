@@ -13,6 +13,9 @@
 		body {
 			margin: 0;
 			background-color: #2c3e50;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-position: center;
 			color: #ecf0f1;
 			font-size: 32px;
 			font-family: Helvetica, Arial, sans-serif;
@@ -31,22 +34,34 @@
 			justify-content: center;
 		}
 		
-		img {
-			border: 0;
-			display: none;
+		.tap {
+			background-image: url('icons/Single_Tap.png');
 		}
+		
+		.swipeleft {
+			background-image: url('icons/Swipe_Left.png');
+		}
+		
+		.swiperight {
+			background-image: url('icons/Swipe_Right.png');
+		}
+		
+		.swipeup {
+			background-image: url('icons/Swipe_Up.png');
+		}
+		
+		.swipedown {
+			background-image: url('icons/Swipe_Down.png');
+		}
+		
+		.drag {
+			background-image: url('icons/Hold_Timer.png');
+		}
+		
+		
 	</style>
 </head>
 <body>
-	<div id="container">
-		<img id="tap" src="icons/Single_Tap.png">
-		<img id="swipeleft" src="icons/Swipe_Left.png">
-		<img id="swiperight" src="icons/Swipe_Right.png">
-		<img id="swipeup" src="icons/Swipe_Up.png">
-		<img id="swipedown" src="icons/Swipe_Down.png">
-		<img id="drag" src="icons/Hold_Timer.png">
-	</div>
-	
 	<script src="libs/jquery-1.9.1.min.js"></script>
 	<script src="js/hammer.js"></script>
 	<script src="js/hammer_fakemultitouch.js"></script>
@@ -63,12 +78,11 @@
 			                     {
 			                        drag_block_horizontal: true,
 			                        drag_block_vertical: true,
-			                        drag_min_distance: 0,
+			                        //drag_min_distance: 0,
 			                        hold: false,
 			                        transform: false,
 			                        release: false
 			                     }),
-			    container = document.getElementById( 'container' ),
 			    iconTimeout = 0,
 			    previousIcon = false;
 			
@@ -121,23 +135,22 @@
 			
 			function ShowIcon( elementName )
 			{
-				document.getElementById( elementName ).style.display = 'block';
-				
-				clearTimeout( iconTimeout );
+				$( 'body' ).addClass( elementName );
 				
 				if( previousIcon !== false && previousIcon !== elementName )
 				{
-					document.getElementById( previousIcon ).style.display = 'none';
+					RemoveIcon( );
 				}
 				
 				previousIcon = elementName;
 				
-				iconTimeout = setTimeout( function( )
-				{
-					document.getElementById( elementName ).style.display = 'none';
-					
-					iconTimeout = 0;
-				}, 2500 );
+				clearTimeout( iconTimeout );
+				iconTimeout = setTimeout( RemoveIcon, 2500 );
+			}
+			
+			function RemoveIcon( )
+			{
+				$( 'body' ).removeClass( previousIcon );
 			}
 		}());
 	</script>
