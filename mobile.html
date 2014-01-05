@@ -13,8 +13,20 @@
 		body {
 			margin: 0;
 			background: #2c3e50 url('icons/steam_home_os.png') center no-repeat fixed;
-			transform: translate(0px, 0);
+			-webkit-transform: translateZ(0);
+			transform: translateZ(0);
+			-webkit-transition: background-image .1s linear;
 			transition: background-image .1s linear;
+		}
+		
+		#performance {
+			pointer-events: none;
+			position: fixed;
+			top: 5px;
+			left: 5px;
+			color: #bdc3c7;
+			font-family: monospace;
+			font-size: 14px;
 		}
 		
 		.tap {
@@ -51,6 +63,8 @@
 	</style>
 </head>
 <body>
+	<div id="performance"></div>
+	
 	<script src="libs/jquery-1.9.1.min.js"></script>
 	<script src="js/hammer.js"></script>
 	<script src="js/hammer_fakemultitouch.js"></script>
@@ -58,8 +72,15 @@
 	<script>
 		(function()
 		{
-			// Send a request straight away so it asks for permission if needed
-			SteamRemoteClient.DoGET( 'authorized/' );
+			var performance = window.performance || {};
+			performance.now = (function() {
+			  return performance.now       ||
+			         performance.mozNow    ||
+			         performance.msNow     ||
+			         performance.oNow      ||
+			         performance.webkitNow ||
+			         function() { return new Date().getTime(); };
+			})();
 			
 			Hammer.plugins.fakeMultitouch();
 			
@@ -70,9 +91,42 @@
 			                        tap_always: false
 			                     }),
 			    iconTimeout = 0,
-			    previousIcon = false;
+			    previousIcon = false,
+			    ajaxTime,
+			    ajaxContainer = $( '#performance' );
+			    lastX = 0.0,
+			    lastY = 0.0;
 			
-			var lastX = 0.0, lastY = 0.0;
+			$( document ).ajaxStart( function( )
+			{
+				ajaxTime = performance.now();
+			} );
+			
+			$( document ).ajaxStop( function( )
+			{
+				ajaxTime = performance.now() - ajaxTime;
+				
+				ajaxContainer.text( 'Latency: ' + Math.round( ajaxTime ) + ' ms' );
+			} );
+			
+			// Send a request straight away so it asks for permission if needed
+			SteamRemoteClient.DoGET( 'authorized/' );
+			
+			hammer.on( 'hold', function( )
+			{
+				var text = prompt( 'Enter your sequence:' ); // I know prompt is evil
+				
+				if( text.length <= 0 )
+				{
+					return;
+				}
+				
+				SteamRemoteClient.Keyboard.Sequence( text, function( )
+				{
+					//SteamRemoteClient.Button.Press( 'enter' );
+					SteamRemoteClient.Keyboard.Key( 'key_enter' );
+				} );
+			} );
 			
 			hammer.on( 'tap', function( )
 			{
@@ -85,7 +139,7 @@
 			{
 				ShowIcon( 'doubletap' );
 				
-				SteamRemoteClient.Button.Press( 'enter' );
+				SteamRemoteClient.Keyboard.Key( 'key_enter' );
 			} );
 			
 			hammer.on( 'pinch', function( )
