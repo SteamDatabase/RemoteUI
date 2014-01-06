@@ -83,7 +83,6 @@
 	
 	<script src="libs/jquery-1.9.1.min.js"></script>
 	<script src="js/hammer.js"></script>
-	<script src="js/hammer_fakemultitouch.js"></script>
 	<script src="js/RemoteClient.js"></script>
 	<script>
 		(function()
@@ -97,8 +96,6 @@
 			         performance.webkitNow ||
 			         function() { return new Date().getTime(); };
 			})();
-			
-			Hammer.plugins.fakeMultitouch();
 			
 			var hammer = Hammer( document.body,
 			                     {
