@@ -1,12 +1,17 @@
 /*
 	"CRemoteControlHTTPReqStatic",      ".*", "GET",      "/static/(.*)"
-	"CRemoteControlHTTPReqButtonPress", ".*", "POST",     "/steam/button/([^/]*)/*"
-	"CRemoteControlHTTPReqKeyboard",    ".*", "POST",     "/steam/keyboard/([^/]*)/*"
-	"CRemoteControlHTTPReqMouse",       ".*", "POST",     "/steam/mouse/([^/]*)/*"
+	"CRemoteControlHTTPReqButtonPress", ".*", "???",      "/steam/button/([^/]*)/*"
+	"CRemoteControlHTTPReqKeyboard",    ".*", "???",      "/steam/keyboard/([^/]*)/*"
+	"CRemoteControlHTTPReqMouse",       ".*", "???",      "/steam/mouse/([^/]*)/*"
 	"CRemoteControlHTTPReqGames",       ".*", "GET",      "/steam/games/*"
 	"CRemoteControlHTTPReqGameAction",  ".*", "POST",     "/steam/games/(\\d+)/([^/]*)"
-	"CRemoteControlHTTPReqSpace",       ".*", "POST|GET", "/steam/space/*"
-	"CRemoteControlHTTPReqAuthorized",  ".*", "GET",      "/steam/authorized/*"
+	"CRemoteControlHTTPReqSpace",       ".*", "???",      "/steam/space/*"
+	"CRemoteControlHTTPReqAuthorized",  ".*", "???",      "/steam/authoriz(ed?|ation)/*"
+	"CRemoteControlHTTPReqState",       ".*", "GET",      "/steam/state/*"
+	"CRemoteControlHTTPReqMusicAction", ".*", "POST",     "/steam/music/(play|pause|next|previous)/*"
+	"CRemoteControlHTTPReqMusicVolume", ".*", "???",      "/steam/music/volume/*"
+	"CRemoteControlHTTPReqMusicMode",   ".*", "???",      "/steam/music/mode/*"
+	"CRemoteControlHTTPReqMusicInfo",   ".*", "GET",      "/steam/music/*"
 */
 
 var SteamRemoteClient =
