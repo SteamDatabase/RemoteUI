@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Steam Remote Control</title>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<style>
+			body, html {
+				height: 100%;
+			}
+			
+			body {
+				background: #333;
+				
+				display:-moz-box;
+				-moz-box-align:center;
+				display:-webkit-box;
+				-webkit-box-align:center;
+				display:box;
+				box-align:center;
+			}
+			
+			.center {
+				text-align: center;
+			}
+			
+			.btn-nav, .btn-lg2 {
+				font-size: 36px;
+				line-height: 40px;
+				border-radius: 0 !important;
+				width: 60px;
+				height: 60px;
+				margin: 0 !important;
+			}
+			
+			.btn-nav {
+				width: 120px;
+				height: 120px;
+				line-height: 100px;
+			}
+			
+			.second-row {
+				margin-top: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-3">
+					<div class="pull-left">
+						<a class="btn btn-lg btn-nav btn-info js-steam-button" data-button="left"><span class="glyphicon glyphicon-arrow-left"></span></a>
+					</div>
+				</div>
+				<div class="col-xs-6 center">
+					<div class="btn-group btn-group-vertical">
+						<a class="btn btn-lg btn-lg2 btn-success js-steam-button" data-button="a">A</a>
+						<a class="btn btn-lg btn-lg2 btn-danger js-steam-button" data-button="b">B</a>
+					</div>
+					<div class="btn-group btn-group-vertical">
+						<a class="btn btn-lg btn-lg2 btn-primary js-steam-button" data-button="x">X</a>
+						<a class="btn btn-lg btn-lg2 btn-warning js-steam-button" data-button="y">Y</a>
+					</div>
+				</div>
+				<div class="col-xs-3">
+					<div class="pull-right">
+						<a class="btn btn-lg btn-info btn-nav js-steam-button" data-button="right"><span class="glyphicon glyphicon-arrow-right"></span></a>
+					</div>
+				</div>
+			</div>
+			<div class="row second-row">
+				<div class="col-xs-12">
+					<div class="btn-group btn-group-justified">
+						<a class="btn btn-lg btn-info js-steam-button" data-button="up"><span class="glyphicon glyphicon-arrow-up"></span></a>
+						<a class="btn btn-lg btn-default js-steam-button" data-button="lb"><span class="glyphicon glyphicon-hand-left"></span></a>
+						<a class="btn btn-lg btn-default js-steam-button" data-button="rtrigger"><span class="glyphicon glyphicon-hand-right"></span></a>
+						<a class="btn btn-lg btn-default js-steam-button" data-button="guide"><span class="glyphicon glyphicon-home"></span></a>
+						<a class="btn btn-lg btn-info js-steam-button" data-button="down"><span class="glyphicon glyphicon-arrow-down"></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script src="libs/jquery-1.9.1.min.js"></script>
+		<script src="libs/jquery.mobile.ext.js"></script>
+		<script src="js/RemoteClient.js"></script>
+		<script>
+		(function()
+		{
+			SteamRemoteClient.Authorize( 'SteamDB Mobile Example', 'SteamDBMobileExample', function() {} );
+			
+			$( '.js-steam-button' ).on( 'click tap', function( e )
+			{
+				//e.preventDefault();
+				SteamRemoteClient.Button.Press( $( this ).data( 'button' ) );
+			} );
+		}());
+		</script>
+	</body>
+</html>
