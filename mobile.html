@@ -123,7 +123,7 @@
 			} );
 			
 			// Send a request straight away so it asks for permission if needed
-			SteamRemoteClient.DoGET( 'authorized/' );
+			SteamRemoteClient.Authorize( 'SteamDB Mobile Example', 'SteamDBMobileExample', function() {} );
 			
 			hammer.on( 'hold', function( )
 			{

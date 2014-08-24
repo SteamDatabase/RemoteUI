@@ -2,6 +2,8 @@
 {
 	SteamRemoteClient.ShowAlerts = true;
 	
+	SteamRemoteClient.Authorize( 'SteamDB', 'PraiseLordGaben', function() {} );
+	
 	var trapArea = $( '.mousetrap' ),
 	    input = $( '.js-steam-input' ),
 	    lastPosition = { x: 0.0, y: 0.0 },
