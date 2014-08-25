@@ -107,7 +107,7 @@ var SteamRemoteClient =
 			SteamRemoteClient.DoGET( 'music/volume/', { }, callback );
 		},
 		
-		SetMode: function( volume, callback )
+		SetVolume: function( volume, callback )
 		{
 			SteamRemoteClient.DoPOST( 'music/volume/', { volume: volume }, callback );
 		},
@@ -227,7 +227,7 @@ var SteamRemoteClient =
 			return;
 		}
 		
-		$( '.alert' )
+		jQuery( '.alert' )
 			.removeClass( 'alert-' + ( cssClass === 'success' ? 'danger' : 'success' ) )
 			.addClass( 'alert-' + cssClass + ' in' )
 			.find( '.title' )
