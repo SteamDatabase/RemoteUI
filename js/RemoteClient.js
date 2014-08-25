@@ -59,6 +59,7 @@ var SteamRemoteClient =
 	{
 		Press: function( button, callback )
 		{
+			// TODO: state param, up/down buttons, timeout param
 			SteamRemoteClient.DoPOST( 'button/' + button + '/', {}, callback );
 		}
 	},
@@ -82,6 +83,59 @@ var SteamRemoteClient =
 		{
 			SteamRemoteClient.DoPOST( 'space/', { space: space }, callback ); // Known spaces: webbrowser, library, friends
 		}
+	},
+	
+	Music:
+	{
+		Get: function( callback )
+		{
+			SteamRemoteClient.DoGET( 'music/', { }, callback );
+		},
+		
+		GetMode: function( callback )
+		{
+			SteamRemoteClient.DoGET( 'music/mode/', { }, callback );
+		},
+		
+		SetMode: function( looped, shuffled, callback )
+		{
+			SteamRemoteClient.DoPOST( 'music/mode/', { looped: looped, shuffled: shuffled }, callback );
+		},
+		
+		GetVolume: function( callback )
+		{
+			SteamRemoteClient.DoGET( 'music/volume/', { }, callback );
+		},
+		
+		SetMode: function( volume, callback )
+		{
+			SteamRemoteClient.DoPOST( 'music/volume/', { volume: volume }, callback );
+		},
+		
+		Play: function( callback )
+		{
+			SteamRemoteClient.DoPOST( 'music/play/', { }, callback );
+		},
+		
+		Pause: function( callback )
+		{
+			SteamRemoteClient.DoPOST( 'music/pause/', { }, callback );
+		},
+		
+		Next: function( callback )
+		{
+			SteamRemoteClient.DoPOST( 'music/next/', { }, callback );
+		},
+		
+		Previous: function( callback )
+		{
+			SteamRemoteClient.DoPOST( 'music/previous/', { }, callback );
+		}
+	},
+	
+	Stream: function( callback )
+	{
+		SteamRemoteClient.DoPOST( 'stream/', { }, callback );
 	},
 	
 	DoGET: function( url, additionalParameters, callback )
