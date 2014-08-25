@@ -88,7 +88,20 @@
 		<script>
 		(function()
 		{
-			SteamRemoteClient.Authorize( 'SteamDB Mobile Example', 'SteamDBMobileExample', function() {} );
+			SteamRemoteClient.Authorize( 'SteamDB Mobile Example', 'SteamDBMobileExample', function( response )
+			{
+				if( response.success === true )
+				{
+					if( response.data.tenfoot === 0 && confirm( 'Do you want to launch Big Picture?' ) )
+					{
+						SteamRemoteClient.UI.Tenfoot();
+					}
+				}
+				else
+				{
+					alert( 'Failed to authorize.' );
+				}
+			} );
 			
 			$( '.js-steam-button' ).on( 'click tap', function( e )
 			{

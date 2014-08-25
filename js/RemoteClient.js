@@ -22,12 +22,24 @@ var SteamRemoteClient =
 	DeviceToken: '',
 	RequestDelay: 0, // Set this to 2000 to delay all requests for 2 seconds
 	ShowAlerts: false, // Used by RemoteUI.html
-	AlertTimeout: 0,
 	
 	Authorize: function( deviceName, deviceToken, callback )
 	{
 		SteamRemoteClient.DeviceToken = deviceToken;
-		SteamRemoteClient.DoPOST( 'authorization/', { device_token: deviceToken, device_name: deviceName }, callback );
+		SteamRemoteClient.DoPOST( 'authorization/', { device_name: deviceName }, callback );
+	},
+	
+	State: function( callback )
+	{
+		SteamRemoteClient.DoGET( 'state/', { }, callback );
+	},
+	
+	UI:
+	{
+		Tenfoot: function( callback )
+		{
+			SteamRemoteClient.DoPOST( 'ui/tenfoot/', {}, callback );
+		}	
 	},
 	
 	Keyboard:
@@ -116,16 +128,16 @@ var SteamRemoteClient =
 			timeout: 5000,
 			success: function( response )
 			{
-				SteamRemoteClient.ShowAlert( 'success', '<b>Request Executed:</b> /' + url, data );
+				SteamRemoteClient.ShowAlert( 'success', '<b>Request Executed:</b> /steam/' + url, data, response );
 				
 				if( typeof callback === 'function' )
 				{
 					callback( response );
 				}
 			},
-			error: function( )
+			error: function( response )
 			{
-				SteamRemoteClient.ShowAlert( 'danger', '<b>Request Failed:</b> /' + url, data );
+				SteamRemoteClient.ShowAlert( 'danger', '<b>Request Failed:</b> /steam/' + url, data, response );
 			}
 		} );
 	},
@@ -134,7 +146,6 @@ var SteamRemoteClient =
 	{
 		var data = jQuery.extend(
 		{
-			device_name: SteamRemoteClient.DeviceName,
 			device_token: SteamRemoteClient.DeviceToken
 		}, additionalParameters );
 		
@@ -146,21 +157,21 @@ var SteamRemoteClient =
 			timeout: 5000,
 			success: function( response )
 			{
-				SteamRemoteClient.ShowAlert( 'success', '<b>Request Executed:</b> /steam/' + url, data );
+				SteamRemoteClient.ShowAlert( 'success', '<b>Request Executed:</b> /steam/' + url, data, response );
 				
 				if( typeof callback === 'function' )
 				{
 					callback( response );
 				}
 			},
-			error: function( )
+			error: function( response )
 			{
-				SteamRemoteClient.ShowAlert( 'danger', '<b>Request Failed:</b> /steam/' + url, data );
+				SteamRemoteClient.ShowAlert( 'danger', '<b>Request Failed:</b> /steam/' + url, data, response );
 			}
 		} );
 	},
 	
-	ShowAlert: function( cssClass, text, data )
+	ShowAlert: function( cssClass, text, data, response )
 	{
 		if( !SteamRemoteClient.ShowAlerts )
 		{
@@ -174,13 +185,21 @@ var SteamRemoteClient =
 			.html( text )
 			.end( )
 			.find( '.data' )
-			.text( data ? JSON.stringify( data ) : 'No payload.' );
+			.text( data ? JSON.stringify( data ) : 'No payload.' )
+			.end( )
+			.find( '.data-response' )
+			.text( response ? SteamRemoteClient.Stringify( response ) : 'No response.' );
+	},
+	
+	Stringify: function( input )
+	{
+		input = JSON.stringify( input );
 		
-		clearInterval( SteamRemoteClient.AlertTimeout );
-		
-		SteamRemoteClient.AlertTimeout = setTimeout( function( )
+		if( input.length > 150 )
 		{
-			$( '.alert' ).removeClass( 'in' );
-		}, 2500 );
+			input = input.substring( 0, 150 ) + '...';
+		}
+		
+		return input;
 	}
 };

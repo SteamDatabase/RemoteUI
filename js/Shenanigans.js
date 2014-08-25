@@ -8,73 +8,89 @@
 	    input = $( '.js-steam-input' ),
 	    lastPosition = { x: 0.0, y: 0.0 },
 	    isMouseInTrapArea = false;
-
-	// We have to use keydown event on document because trapArea can't really be in focus when pressing keys
-	$( document ).on( 'keydown', function( e )
+	
+	trapArea.one( 'click', function( )
 	{
-		if( isMouseInTrapArea )
+		trapArea.find( 'h3' ).text( 'It\'s a trap!' );
+		
+		// We have to use keydown event on document because trapArea can't really be in focus when pressing keys
+		$( document ).on( 'keydown', function( e )
 		{
-			var key = 'key_' + Keycode.GetValueByEvent( e );
+			if( isMouseInTrapArea )
+			{
+				var key = 'key_' + Keycode.GetValueByEvent( e );
+				
+				trapArea.find( 'h3' ).text( key );
+				
+				SteamRemoteClient.Keyboard.Key( key );
+				
+				return false;
+			}
+		} );
+		
+		$( trapArea ).on( {
+			click: function( )
+			{
+				SteamRemoteClient.DoPOST( 'mouse/click', { button: 'mouse_left' } );
+			},
 			
-			trapArea.find( 'h3' ).text( key );
+			mouseenter: function( )
+			{
+				isMouseInTrapArea = true;
+			},
 			
-			SteamRemoteClient.Keyboard.Key( key );
+			mouseleave: function( )
+			{
+				isMouseInTrapArea = false;
+			},
 			
-			return false;
-		}
+			mousewheel: function( e )
+			{
+				SteamRemoteClient.Keyboard.Key( e.originalEvent.wheelDelta > 0 ? 'key_left' : 'key_right' ); // Ideally it should be up/down for dropdowns
+				
+				return false;
+			},
+			
+			mousemove: function( e )
+			{
+				var deltaX = e.clientX - lastPosition.x,
+				    deltaY = e.clientY - lastPosition.y;
+				
+				lastPosition =
+				{
+					x: e.clientX,
+					y: e.clientY
+				};
+				
+				SteamRemoteClient.DoPOST( 'mouse/move',
+					{
+						delta_x: deltaX,
+						delta_y: deltaY
+					}
+				);
+			}
+		} );
 	} );
 	
-	$( trapArea ).on( {
-		click: function( )
-		{
-			SteamRemoteClient.DoPOST( 'mouse/click', { button: 'mouse_left' } );
-		},
-		
-		mouseenter: function( )
-		{
-			isMouseInTrapArea = true;
-		},
-		
-		mouseleave: function( )
-		{
-			isMouseInTrapArea = false;
-		},
-		
-		mousewheel: function( e )
-		{
-			SteamRemoteClient.Keyboard.Key( e.originalEvent.wheelDelta > 0 ? 'key_left' : 'key_right' ); // Ideally it should be up/down for dropdowns
-			
-			return false;
-		},
-		
-		mousemove: function( e )
-		{
-			var deltaX = e.clientX - lastPosition.x,
-			    deltaY = e.clientY - lastPosition.y;
-			
-			lastPosition =
-			{
-				x: e.clientX,
-				y: e.clientY
-			};
-			
-			SteamRemoteClient.DoPOST( 'mouse/move',
-				{
-					delta_x: deltaX,
-					delta_y: deltaY
-				}
-			);
-		}
-	} );
-
-	// Get space
-	$( '.js-steam-get-space' ).click( function( e )
+	// Get state
+	$( '.js-steam-get-state' ).click( function( e )
 	{
 		e.preventDefault( );
 		
-		SteamRemoteClient.Space.Current( function( data )
+		SteamRemoteClient.State();
+	} );
+
+	// Tenfoot
+	$( '.js-steam-launch-bp' ).click( function( e )
+	{
+		e.preventDefault( );
+		
+		SteamRemoteClient.State( function( response )
 		{
-			SteamRemoteClient.ShowAlert( 'success', '<b>Current space:</b> ' + data.data.name );
+			if( response.success === true && response.data.tenfoot === 0 )
+			{
+				SteamRemoteClient.UI.Tenfoot();
+			}
 		} );
 	} );
 
@@ -86,8 +102,6 @@
 		SteamRemoteClient.Games.Index( function( data )
 		{
 			var list = $( '.js-steam-games-list' ).empty( );
-			
-			console.log( data );
 			
 			for( var i in data.data )
 			{
