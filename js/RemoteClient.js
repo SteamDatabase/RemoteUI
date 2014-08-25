@@ -78,14 +78,9 @@ var SteamRemoteClient =
 	
 	Space:
 	{
-		Current: function( callback )
-		{
-			SteamRemoteClient.DoGET( 'space/', {}, callback );
-		},
-		
 		Set: function( space, callback )
 		{
-			SteamRemoteClient.DoPOST( 'space/', { name: space }, callback ); // Known spaces: webbrowser, library, friends
+			SteamRemoteClient.DoPOST( 'space/', { space: space }, callback ); // Known spaces: webbrowser, library, friends
 		}
 	},
 	
