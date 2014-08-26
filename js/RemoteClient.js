@@ -31,6 +31,7 @@ var SteamRemoteClient =
 	
 	State: function( callback )
 	{
+		// data: {"long_poll": +!firstPoll, "session_name": "playerControls"}
 		SteamRemoteClient.DoGET( 'state/', { }, callback );
 	},
 	
@@ -55,6 +56,19 @@ var SteamRemoteClient =
 		}
 	},
 	
+	Mouse:
+	{
+		Move: function( delta_x, delta_y, callback )
+		{
+			SteamRemoteClient.DoPOST( 'mouse/move/', { delta_x: delta_x, delta_y: delta_y }, callback );
+		},
+		
+		Click: function( button, callback )
+		{
+			SteamRemoteClient.DoPOST( 'mouse/click/', { button: button }, callback ); // Button: mouse_left, mouse_right
+		}
+	},
+	
 	Button:
 	{
 		Press: function( button, callback )
@@ -66,19 +80,24 @@ var SteamRemoteClient =
 	
 	Games:
 	{
-		Index: function( callback )
+		Get: function( callback )
 		{
 			SteamRemoteClient.DoGET( 'games/', {}, callback );
 		},
 		
-		Action: function( appid, action, callback )
+		Run: function( appid, callback )
 		{
-			SteamRemoteClient.DoPOST( 'games/' + appid + '/' + action, {}, callback );
+			SteamRemoteClient.DoPOST( 'games/' + appid + '/run', {}, callback );
 		}
 	},
 	
 	Space:
 	{
+		Get: function( callback )
+		{
+			SteamRemoteClient.DoGET( 'space/', { }, callback );
+		}
+		
 		Set: function( space, callback )
 		{
 			SteamRemoteClient.DoPOST( 'space/', { space: space }, callback ); // Known spaces: webbrowser, library, friends

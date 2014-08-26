@@ -5,6 +5,7 @@
 		<title>Steam Remote Control</title>
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/shenanigans.css">
+		<link rel="stylesheet" href="playerControls.css">
 	</head>
 	<body>
 		<a href="https://github.com/SteamDatabase/RemoteUI" target="_BLANK" class="hidden-xs"><img class="github-fork" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
@@ -65,6 +66,21 @@
 				</div>
 				
 				<div class="list-group js-steam-games-list"></div>
+			</div>
+			
+			<div class="row">
+				<div id="playerControls">
+					<div class="controlsSpacer"></div>
+					<a id="controlsRepeatButton" class="controlsButton toggleButton offState"></a>
+					<a id="controlsShuffleButton" class="controlsButton toggleButton offState"></a>
+					<a id="controlsBackTrackButton" class="controlsButton"></a>
+					<a id="controlsForwardTrackButton" class="controlsButton"></a>
+					<a id="controlsPlayButton" class='controlsPlayButtonPlay toggleButton offState'></a>
+					<div id="controlsVolumeBar">
+						<a id="controlsVolumeScrubber"></a>
+					</div>
+					<div class="controlsSpacer" style="width: 10px;"></div>
+				</div>
 			</div>
 		</div>
 		

@@ -31,7 +31,7 @@
 		$( trapArea ).on( {
 			click: function( )
 			{
-				SteamRemoteClient.DoPOST( 'mouse/click', { button: 'mouse_left' } );
+				SteamRemoteClient.Mouse.Click( 'mouse_left' );
 			},
 			
 			mouseenter: function( )
@@ -62,12 +62,7 @@
 					y: e.clientY
 				};
 				
-				SteamRemoteClient.DoPOST( 'mouse/move',
-					{
-						delta_x: deltaX,
-						delta_y: deltaY
-					}
-				);
+				SteamRemoteClient.Mouse.Move( deltaX, deltaY );
 			}
 		} );
 	} );
@@ -99,7 +94,7 @@
 	{
 		e.preventDefault( );
 		
-		SteamRemoteClient.Games.Index( function( data )
+		SteamRemoteClient.Games.Get( function( data )
 		{
 			var list = $( '.js-steam-games-list' ).empty( );
 			
@@ -169,6 +164,6 @@
 	{
 		e.preventDefault();
 		
-		SteamRemoteClient.Games.Action( input.val(), 'run' );
+		SteamRemoteClient.Games.Run( input.val() );
 	} );
 }());
