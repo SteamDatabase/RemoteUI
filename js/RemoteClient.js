@@ -96,7 +96,7 @@ var SteamRemoteClient =
 		Get: function( callback )
 		{
 			SteamRemoteClient.DoGET( 'space/', { }, callback );
-		}
+		},
 		
 		Set: function( space, callback )
 		{
